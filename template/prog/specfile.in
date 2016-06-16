@@ -1,0 +1,33 @@
+Name: @SLK_LIBNAME@
+Version: %SOFTWARE_VERSION%
+Release: 1%{?dist}
+Summary: @SLK_OWNER@ internal tools
+License: @SLK_OWNER@ internal use
+Group: System Environment/Configuration
+Source: %{name}-%{version}.tar.gz
+Requires: sysfunc >= 1.1.25
+# If your code has other dependencies, add them in additional 'Requires:' lines
+BuildRequires: sysfunc
+BuildArch: noarch
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}
+AutoReqProv: no
+Prefix: %INSTALL_DIR%
+%description
+@SLK_OWNER@ internal tools
+
+%prep
+%setup -q
+
+%build
+make
+
+%install
+INSTALL_ROOT=$RPM_BUILD_ROOT make install INSTALL_DIR=%{prefix} 
+
+%clean
+rm -rf $RPM_BUILD_ROOT
+
+%files
+%defattr(-,root,root)
+%{prefix}
+/usr/bin/@SLK_LIBNAME@

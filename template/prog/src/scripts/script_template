@@ -1,0 +1,59 @@
+#
+# Template for a file containing actual library functions
+#
+# For an example of a library built from shell_lib_kit, see the sysfunc library
+# at https://github.com/flaupretre/sysfunc.
+#
+# For a better readability, this file should be removed once you have
+# implemented your own script(s).
+#============================================================================
+
+#=============================================================================
+# Section: <Choose a section title>
+#
+# <Note> This file will be named '@SLK_PREFIX@_<short_section_name>.sh' and the
+#   name of every function contained in this file must start with
+#   '@SLK_PREFIX@_<short_section name>_'.
+# Example: A file containing boot-related functions may be named
+#   '@SLK_PREFIX@_boot.sh' and every function it contains will start with
+#   '@SLK_PREFIX@_boot_'.
+#=============================================================================
+
+##----------------------------------------------------------------------------
+# Title for function 1
+#
+# More info about this function. This
+# can be contained on several lines. Mark paragraph end with an empty line.
+#
+#- This will appear in a bulleted list
+#- This too...
+#
+# Args: none
+# or
+# Args:
+#	$1: <text>
+# Returns: <What does this function return ?>
+# Displays: Nothing|A lot...
+##----------------------------------------------------------------------------
+
+function @SLK_PREFIX@_<short_section_name>_dummy
+{
+...
+
+}
+
+##----------------------------------------------------------------------------
+# Another function...
+#
+# Args: none
+# Returns: Always 0
+# Displays: Library version (string)
+#-----------------------------------------------------------------------------
+
+function @SLK_PREFIX@_<short_section_name>_dummy2
+{
+...
+
+}
+
+#=============================================================================
