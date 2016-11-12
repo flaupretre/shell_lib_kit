@@ -4,14 +4,14 @@
 # For an example of a library built from shell_lib_kit, see the sysfunc library
 # at https://github.com/flaupretre/sysfunc.
 #
-# For a better readability, this file should be removed once you have
-# implemented your own script(s).
+# This file must be removed once you have used it as a model to
+# implement your own script(s).
 #============================================================================
 
 #=============================================================================
 # Section: <Choose a section title>
 #
-# <Note> This file will be named '@SLK_PREFIX@_<short_section_name>.sh' and the
+# <Note> This file must be named '@SLK_PREFIX@_<short_section_name>.sh' and the
 #   name of every function contained in this file must start with
 #   '@SLK_PREFIX@_<short_section name>_'.
 # Example: A file containing boot-related functions may be named
