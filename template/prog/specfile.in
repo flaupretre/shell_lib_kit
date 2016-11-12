@@ -5,9 +5,9 @@ Summary: @SLK_OWNER@ internal tools
 License: @SLK_OWNER@ internal use
 Group: System Environment/Configuration
 Source: %{name}-%{version}.tar.gz
-Requires: sysfunc >= 1.1.25
+Requires: sysfunc >= 2.0.0
 # If your code has other dependencies, add them in additional 'Requires:' lines
-BuildRequires: sysfunc
+BuildRequires: sysfunc >= 2.0.0
 BuildArch: noarch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}
 AutoReqProv: no
