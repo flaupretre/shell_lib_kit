@@ -114,7 +114,7 @@ export PATH
 
 #-- Load sysfunc
 
-. /usr/bin/sysfunc
+. /usr/bin/sysfunc || :
 if ! sf_loaded 2>/dev/null ; then
 	echo "ERROR: Sysfunc software not found - Aborting"
 	exit 1
@@ -163,7 +163,7 @@ if [ "X$_c" = 'X@SLK_LIBNAME@' ] ; then	# Executed
 	for arg ; do	# Preserve potential empty strings
 		_exec="$_exec '$arg'"
 	done
-	eval "$_exec ; _rc=\$?"
+	eval "$_exec ; _rc=\n"
 	exit $_rc
 fi
 
