@@ -13,8 +13,7 @@ set -e	# Exit on non-zero status
 RUNTYPE=local
 [ -n "$GITLAB_CI" ] && RUNTYPE=gitlab
 
-WS_BASE=`pwd`
-[ $RUNTYPE = local ] && WS_BASE="`dirname $WS_BASE`"
+WS_BASE=`dirname $0`/..
 
 ret=0
 
@@ -42,7 +41,7 @@ make clean || ret=$?
 
 LIB_SCRIPT="$WS_BASE/ci/actions/$action.sh"
 if [ -f "$LIB_SCRIPT" ] ; then
-	echo "--- Ruuning action: $action ---"
+	echo "--- Running action: $action ---"
 	. "$LIB_SCRIPT"
 else
 	echo "--- Nothing to do"
