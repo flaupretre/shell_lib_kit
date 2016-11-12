@@ -10,7 +10,7 @@ include vars.mk
 
 TGZ_PREFIX = $(SOFTWARE_NAME)-$(SOFTWARE_VERSION)
 TGZ_FILE = $(TGZ_PREFIX).tar.gz
-RPM_PATTERN=$(TGZ_PREFIX)-$(SOFTWARE_VERSION)-*.noarch.rpm
+RPM_PATTERN=$(TGZ_PREFIX)-*.noarch.rpm
 
 #=====================================
 
@@ -47,8 +47,7 @@ rpm: tgz specfile
 	mv -f $(HOME)/rpmbuild/RPMS/noarch/$(RPM_PATTERN) .
 	/bin/rm -rf $(HOME)/rpmbuild/BUILD/$(TGZ_PREFIX)
 
-test:
-deploy:
+test deploy:
 	chmod +x ci/run.sh
 	ci/run.sh $@
 
