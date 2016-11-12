@@ -6,15 +6,17 @@
 SOFTWARE_NAME = @SLK_LIBNAME@
 
 include config.mk
+include vars.mk
 
 TGZ_PREFIX = $(SOFTWARE_NAME)-$(SOFTWARE_VERSION)
 TGZ_FILE = $(TGZ_PREFIX).tar.gz
+RPM_PATTERN=$(TGZ_PREFIX)-$(SOFTWARE_VERSION)-*.noarch.rpm
 
 #=====================================
 
 all: processed
 
-.PHONY: processed clean tgz install all rpm
+.PHONY: processed clean tgz install all rpm test deploy
 
 processed: processed/script.sh
 
@@ -40,10 +42,17 @@ $(TGZ_FILE): clean
 	/bin/rm -rf /tmp/$(TGZ_PREFIX)
 
 rpm: tgz specfile
-	chmod +x build/dist.sh
-	rpmbuild -bb --define="_sourcedir `pwd`" --define="dist `build/dist.sh`" specfile
-	
+	/bin/rm -rf $(HOME)/rpmbuild/RPMS/noarch/$(RPM_PATTERN)
+	rpmbuild -bb --define="_sourcedir `pwd`" --define="dist `sysfunc os_dist_macro`" specfile
+	mv -f $(HOME)/rpmbuild/RPMS/noarch/$(RPM_PATTERN) .
+	/bin/rm -rf $(HOME)/rpmbuild/BUILD/$(TGZ_PREFIX)
+
+test:
+deploy:
+	chmod +x ci/run.sh
+	ci/run.sh $@
+
 clean:
-	/bin/rm -rf processed bin specfile $(TGZ_FILE)
+	/bin/rm -rf processed bin specfile $(TGZ_FILE) $(RPM_PATTERN)
 
 #============================================================================
