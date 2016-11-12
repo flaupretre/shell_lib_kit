@@ -1,0 +1,36 @@
+# This file is an example of gitlab-ci deployment file
+
+before_script:
+  - sudo yum -y install rpm-build
+
+stages:
+  - test
+  - deploy
+
+test_job:
+  stage: test
+  script:
+    - sudo -E make test
+
+deploy_tag_el7:
+  stage: deploy
+  when: on_success
+  tags:
+    - el7
+  environment: production
+  script:
+    - sudo -E make deploy
+  only:
+    - tags@my-ci-user/@SLK_LIBNAME@
+
+deploy_dev_el7:
+  stage: deploy
+  when: on_success
+  tags:
+    - el7
+  environment: develop
+  script:
+    - sudo -E make deploy
+  only:
+    - develop@my-ci-user/@SLK_LIBNAME@
+

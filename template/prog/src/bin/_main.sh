@@ -96,7 +96,7 @@ export _@SLK_LIBNAME_UC@_SCRIPT_SH=$_@SLK_LIBNAME_UC@_PROCESSED_DIR/script.sh
 
 #-- Clear potentially conflicting f...ing aliases
 
-for i in cp mv rm
+for i in cp mv rm grep
 	do
 	unalias $i >/dev/null 2>&1 || :
 done
@@ -114,7 +114,7 @@ export PATH
 
 #-- Load sysfunc
 
-. sysfunc
+. /usr/bin/sysfunc || :
 if ! sf_loaded 2>/dev/null ; then
 	echo "ERROR: Sysfunc software not found - Aborting"
 	exit 1
@@ -132,18 +132,38 @@ export @SLK_PREFIX@_install_dir
 
 #-- Check if sourced or executed
 
-echo "$0" | grep @SLK_LIBNAME@ >/dev/null 2>&1
-if [ $? = 0 ] ; then	# Executed
+_c=`basename "$0" | sed 's/\..*$//g'`
+if [ "X$_c" = 'X@SLK_LIBNAME@' ] ; then	# Executed
+	# Handle base options
+
+	while getopts 'vynh' flag
+		do
+		case $flag in
+			v) sf_verbose_level=`expr $sf_verbose_level + 1`;;
+			y) sf_forceyes=true;;
+			n) sf_noexec=true;;
+			h) _@SLK_PREFIX@usage; exit 0;;
+
+			?) _@SLK_PREFIX@_usage; exit 1;;
+		esac
+	done
+
+	[ $OPTIND != 1 ] && shift `expr $OPTIND - 1`
+
+	export sf_forceyes sf_verbose_level sf_noexec
+
+	# Now, handle command
+
 	_cmd="$1"
-	[ "$_cmd" = '' ] && _@SLK_PREFIX@_fatal 'No command'
+	[ "X$_cmd" = 'X' ] && _@SLK_PREFIX@_fatal 'No command'
 	_func="@SLK_PREFIX@_$_cmd"
 	shift
 	type "$_func" >/dev/null 2>&1 || _@SLK_PREFIX@_fatal "$_cmd: Unknown command"
-	_cmd="$_func"
+	_exec="$_func"
 	for arg ; do	# Preserve potential empty strings
-		_cmd="$_cmd '$arg'"
+		_exec="$_exec '$arg'"
 	done
-	eval "$_cmd ; _rc=\$?"
+	eval "$_exec ; _rc=\n"
 	exit $_rc
 fi
 
