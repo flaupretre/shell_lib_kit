@@ -8,14 +8,14 @@
 ##----------------------------------------------------------------------------
 # Checks if the library is already loaded
 #
-#- Of course, if it can run, the library is loaded. So, it always returns 0.
-#- Allows to support the 'official' way to load @SLK_LIBNAME@ :
+# Of course, if it can run, the library is loaded. So, it always returns 0.
+# Allows to support the 'official' way to load @SLK_LIBNAME@ :
 #	@SLK_PREFIX@_loaded 2>/dev/null || . @SLK_LIBNAME@
 #
 # Args: none
 # Returns: Always 0
 # Displays: Nothing
-##----------------------------------------------------------------------------
+#----------------------------------------------------------------------------
 
 function @SLK_PREFIX@_loaded
 {
@@ -36,16 +36,45 @@ echo "%SOFTWARE_VERSION%"
 }
 
 ##----------------------------------------------------------------------------
-# Display help
+# Displays help
 #
 # Args:
-# Returns: No return
-# Displays: Help message
+#	$*: Optional. Function names or substrings
+# Returns: 0
+# Displays: Usage if no arg, function doc(s) if arg(s) provided
 #-----------------------------------------------------------------------------
 
 function @SLK_PREFIX@_help
 {
-_@SLK_PREFIX@_usage
+typeset has_run string func fline fstart nb
+
+if [ $# = 0 ] ; then
+	_@SLK_PREFIX@_usage
+	return 0
+fi
+
+#---- Function help
+
+for string ; do
+	for func in `typeset -F | sed 's/^declare -f //' | grep '^@SLK_PREFIX@_' | sed 's/^@SLK_PREFIX@_//' | grep "$string"` ; do
+		fline=`cat $_@SLK_LIBNAME_UC@_MAIN_SCRIPT $_@SLK_LIBNAME_UC@_SCRIPT_SH | grep -E -n "^function +@SLK_PREFIX@_$func\$" | head -1 | sed 's/:.*$//g'`
+		[ -z "$fline" ] && sf_fatal "@SLK_PREFIX@_$func: Cannot find function in script file"
+		fline=`expr $fline - 1`
+		fstart=`cat $_@SLK_LIBNAME_UC@_MAIN_SCRIPT $_@SLK_LIBNAME_UC@_SCRIPT_SH | head -$fline | grep -n '^##' | tail -1 | sed 's/:.*$//g'`
+		nb=`expr $fline - $fstart + 1`
+		if [ -n "$has_run" ] ; then
+			echo
+			echo "----------------------------------------------------------------------------"
+			echo
+		fi
+		has_run=y
+		echo "Command: $func"
+		echo
+		cat $_@SLK_LIBNAME_UC@_MAIN_SCRIPT $_@SLK_LIBNAME_UC@_SCRIPT_SH \
+			| head -$fline | tail -$nb | grep '^#' | grep -v '^##' \
+			| grep -v '^#-------' | sed 's/^#//' | sed 's/^ //' 
+	done
+done
 }
 
 ##----------------------------------------------------------------------------
@@ -77,10 +106,9 @@ function _@SLK_PREFIX@_usage
 {
 echo 'Usage: @SLK_LIBNAME@ <cmd> [args]'
 echo
-echo "Defined commands :"
+echo "Defined commands (run '@SLK_LIBNAME@ help <command>' for more):"
 echo
-typeset -F | sed 's/^declare -f //' | grep '^@SLK_PREFIX@_' | sed 's/^@SLK_PREFIX@_//' \
-	| grep -v '^loaded$'
+typeset -F | sed 's/^declare -f //' | grep '^@SLK_PREFIX@_' | sed 's/^@SLK_PREFIX@_//'
 }
 
 #=============================================================================
@@ -91,6 +119,7 @@ typeset -F | sed 's/^declare -f //' | grep '^@SLK_PREFIX@_' | sed 's/^@SLK_PREFI
 
 export _@SLK_LIBNAME_UC@_BASE=%INSTALL_DIR%
 export _@SLK_LIBNAME_UC@_BIN_DIR=$_@SLK_LIBNAME_UC@_BASE/bin
+export _@SLK_LIBNAME_UC@_MAIN_SCRIPT=$_@SLK_LIBNAME_UC@_BIN_DIR/@SLK_LIBNAME@.sh
 export _@SLK_LIBNAME_UC@_PROCESSED_DIR=$_@SLK_LIBNAME_UC@_BASE/processed
 export _@SLK_LIBNAME_UC@_SCRIPT_SH=$_@SLK_LIBNAME_UC@_PROCESSED_DIR/script.sh
 
@@ -163,7 +192,7 @@ if [ "X$_c" = 'X@SLK_LIBNAME@' ] ; then	# Executed
 	for arg ; do	# Preserve potential empty strings
 		_exec="$_exec '$arg'"
 	done
-	eval "$_exec ; _rc=\n"
+	eval "$_exec ; _rc=\$?"
 	exit $_rc
 fi
 
