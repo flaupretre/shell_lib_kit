@@ -7,7 +7,7 @@
 #
 # The following environment variables must be set:
 #
-#	- SLK_PREFIX: Function profix (without '_')
+#	- SLK_PREFIX: Function prefix (without '_')
 #	- SLK_LIBNAME: Library name (ex: saplib, dblib)
 #	- SLK_OWNER: Library owner
 #	- SLK_INSTALL_DIR: Installation directory
