@@ -35,4 +35,4 @@ clean_doc:
 doc:
 	$(MAKE) clean_doc
 	mkdir ./doc
-	$(PHP) $(PPC_DIR)/shell_doc.php -f gfm -e '_' -c @SLK_PREFIX@_ -o ./doc -S -p ./main_header.md -s ./main_footer.md -H ./header.md -F ./footer.md ../prog/src/scripts/*.sh
+	$(PHP) $(PPC_DIR)/shell_doc.php -f gfm -e '_' -c @SLK_PREFIX@_ -o ./doc -S -p ./main_header.md -s ./main_footer.md -H ./header.md -F ./footer.md ../prog/src/*.sh

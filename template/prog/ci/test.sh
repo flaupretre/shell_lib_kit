@@ -8,11 +8,11 @@
 #The code below is just an example
 # Feel free to replace it with your own tests
 
-make rpm
-
-make -k clean install
+make -k rpm clean install
 
 @SLK_LIBNAME@ version
+
+@SLK_LIBNAME@ help version
 
 . @SLK_LIBNAME@
 

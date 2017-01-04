@@ -1,11 +1,11 @@
 #
 # This scripts generates an empty shell library
 #
-# Usage : genlib.sh <Target directory>
+# Usage : genlib.sh [Target directory]
 #
 # By security, the target directory must not exist when the script is launched.
 #
-# The following environment variables must be set:
+# The following environment variables will be used if set:
 #
 #	- SLK_PREFIX: Function prefix (without '_')
 #	- SLK_LIBNAME: Library name (ex: saplib, dblib)
@@ -37,14 +37,16 @@ fi
 
 #-- Validate target dir
 
-if [ $# != 1 -o -z "$1" ]; then
-	sf_fatal "Usage : $0 <Target directory>"
+if [ -n "$1" ]; then
+	target="$1"
+else
+	target=`sf_ask 'Target directory : '`
 fi
 
-parent=`dirname $1`
+parent=`dirname $target`
 [ -e "$parent" ] || sf_fatal "Directory $parent should exist"
 parent=`sf_file_realpath $parent`
-SLK_TARGET_DIR=$parent/`basename $1`
+SLK_TARGET_DIR=$parent/`basename $target`
 [ -e "$SLK_TARGET_DIR" ] && sf_fatal "Directory $SLK_TARGET_DIR must not exist"
 
 export SLK_TARGET_DIR
@@ -58,12 +60,12 @@ SLK_BASE=`sf_file_realpath $dir`
 
 export SLK_BASE SLK_VERSION
 
-# Check other variables
+#-- Get other variables
 
-[ -n "$SLK_PREFIX" ] || sf_fatal "SLK_PREFIX variable should be set"
-[ -n "$SLK_LIBNAME" ] || sf_fatal "SLK_LIBNAME variable should be set"
-[ -n "$SLK_OWNER" ] || sf_fatal "SLK_OWNER variable should be set"
-[ -n "$SLK_INSTALL_DIR" ] || sf_fatal "SLK_INSTALL_DIR variable should be set"
+[ -z "$SLK_PREFIX"      ] && SLK_PREFIX=`sf_ask 'Function prefix (without trailing _) : '`
+[ -z "$SLK_LIBNAME"     ] && SLK_LIBNAME=`sf_ask 'Library name : '`
+[ -z "$SLK_OWNER"       ] && SLK_OWNER=`sf_ask 'Library owner : '`
+[ -z "$SLK_INSTALL_DIR" ] && SLK_INSTALL_DIR=`sf_ask 'Install directory : '`
 
 SLK_LIBNAME_UC=`echo $SLK_LIBNAME | tr '[:lower:]' '[:upper:]'`
 
@@ -71,6 +73,8 @@ export SLK_PREFIX SLK_LIBNAME SLK_LIBNAME_UC SLK_OWNER SLK_INSTALL_DIR
 
 #--------------
 # Create library
+
+sf_msg "Generating library..."
 
 cd $SLK_BASE/template
 cp -rp . $SLK_TARGET_DIR
@@ -82,10 +86,13 @@ for path in `find . -type f`
 	sf_chmod `sf_file_mode $path` $SLK_TARGET_DIR/$path
 done
 
-mv $SLK_TARGET_DIR/prog/src/bin/_main.sh $SLK_TARGET_DIR/prog/src/bin/$SLK_LIBNAME.sh
+mv $SLK_TARGET_DIR/prog/src/dummy.sh $SLK_TARGET_DIR/prog/src/${SLK_PREFIX}_dummy.sh
 
 #--------------
 
 sf_msg "Library creation OK"
+echo
+sf_msg "Note: Remember to delete the example source file ($SLK_TARGET_DIR/prog/src/${SLK_PREFIX}_dummy.sh) when you don't need it anymore..."
+
 sf_finish 0
 

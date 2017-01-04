@@ -5,7 +5,7 @@
 #=============================================================================
 
 env
-set -x
+#set -x
 set -e	# Exit on non-zero status
 
 #-----
@@ -13,7 +13,8 @@ set -e	# Exit on non-zero status
 RUNTYPE=local
 [ -n "$GITLAB_CI" ] && RUNTYPE=gitlab
 
-WS_BASE=`dirname $0`/..
+cd `dirname $0`/../..
+WS_BASE=`/bin/pwd`
 
 ret=0
 
@@ -39,7 +40,7 @@ make clean || ret=$?
 
 #-- Run library-specific script if it exists
 
-LIB_SCRIPT="$WS_BASE/ci/actions/$action.sh"
+LIB_SCRIPT="$WS_BASE/ci/$action.sh"
 if [ -f "$LIB_SCRIPT" ] ; then
 	echo "--- Running action: $action ---"
 	. "$LIB_SCRIPT"
