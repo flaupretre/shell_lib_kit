@@ -1,26 +1,23 @@
 #
-# Template for a file containing actual library functions
+# Template for a file containing your library functions
 #
 # For an example of a library built from shell_lib_kit, see the sysfunc library
 # at https://github.com/flaupretre/sysfunc.
 #
-# This file must be removed once you have used it as a model to
+# This dummy file must be removed once you have used it as a model to
 # implement your own script(s).
 #============================================================================
 
 #=============================================================================
-# Section: <Choose a section title>
+# Section: Dummy features
 #
-# <Note> This file must be named '@SLK_PREFIX@_<short_section_name>.sh' and the
-#   name of every function contained in this file must start with
-#   '@SLK_PREFIX@_<short_section name>_'.
-# Example: A file containing boot-related functions may be named
-#   '@SLK_PREFIX@_boot.sh' and every function it contains will start with
-#   '@SLK_PREFIX@_boot_'.
+# <Note> In this example the section string (short section name) is
+#   'dum'. It is a random string which will, by convention, prefix every
+#   function defined in this file.
 #=============================================================================
 
 ##----------------------------------------------------------------------------
-# Title for function 1
+# Dummy check
 #
 # More info about this function. This
 # can be contained on several lines. Mark paragraph end with an empty line.
@@ -32,28 +29,31 @@
 # or
 # Args:
 #	$1: <text>
+#	$2: ...
+# or
+#	$*: ...
 # Returns: <What does this function return ?>
 # Displays: Nothing|A lot...
-##----------------------------------------------------------------------------
+#----------------------------------------------------------------------------
 
-function @SLK_PREFIX@_<short_section_name>_dummy
+function @SLK_PREFIX@_dum_check
 {
-...
+echo 'Check OK !'
 
 }
 
 ##----------------------------------------------------------------------------
 # Another function...
 #
-# Args: none
+# Args:
+#	$*: String to display
 # Returns: Always 0
-# Displays: Library version (string)
+# Displays: Something *very* interesting
 #-----------------------------------------------------------------------------
 
-function @SLK_PREFIX@_<short_section_name>_dummy2
+function @SLK_PREFIX@_dum_cmd2
 {
-...
-
+echo "Received <$*>..."
 }
 
 #=============================================================================

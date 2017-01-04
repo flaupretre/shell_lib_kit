@@ -9,7 +9,7 @@
 #----------
 
 CMD=`basename $0`
-cd `dirname $0`/..
+cd `dirname $0`/../..
 BASE_DIR=`/bin/pwd`
 
 INSTALL_TARGET_DIR="$1"
@@ -40,8 +40,8 @@ sf_check_link $INSTALL_TARGET_DIR/bin/@SLK_LIBNAME@.sh $INSTALL_ROOT/usr/bin/@SL
 
 $INSTALL_DIR/bin/set-shell.sh # Determine shell to use
 
-sf_create_dir $INSTALL_DIR/processed root 555
-for i in processed/* ; do
+sf_create_dir $INSTALL_DIR/ppc root 555
+for i in ppc/* ; do
 	[ -f "$i" ] || continue	# Handle case where dir is empty
 	sf_check_copy $i $INSTALL_DIR/$i 444
 done

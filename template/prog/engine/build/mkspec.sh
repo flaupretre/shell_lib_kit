@@ -5,7 +5,7 @@
 #============================================================================
 
 CMD=`basename $0`
-cd `dirname $0`/..
+cd `dirname $0`/../..
 BASE_DIR=`/bin/pwd`
 SOFTWARE_VERSION="$1"
 INSTALL_DIR="$2"
