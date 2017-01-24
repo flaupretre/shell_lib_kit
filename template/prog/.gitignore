@@ -1,5 +1,5 @@
-*.tar.gz
-*.rpm
-specfile
-bin
-ppc
+/*.tar.gz
+/*.rpm
+/specfile
+/bin
+/ppc
